@@ -39,6 +39,17 @@ public class ReceiveSharingIntentModule extends ReactContextBaseJavaModule {
   public void getFileNames(Promise promise){
     Activity mActivity = getCurrentActivity();
     if(mActivity == null) { return; }
+
+    if (!mActivity.isTaskRoot()) {
+      Intent newIntent = new Intent(mActivity.getIntent());
+      newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      mActivity.startActivity(newIntent);
+
+      receiveSharingIntentHelper.sendFileNames(reactContext, newIntent, promise);
+      mActivity.finish();
+      return;
+    }
+
     Intent intent = mActivity.getIntent();
     receiveSharingIntentHelper.sendFileNames(reactContext, intent, promise);
     mActivity.setIntent(null);
@@ -48,6 +59,17 @@ public class ReceiveSharingIntentModule extends ReactContextBaseJavaModule {
   public void clearFileNames(){
     Activity mActivity = getCurrentActivity();
     if(mActivity == null) { return; }
+
+    if (!mActivity.isTaskRoot()) {
+      Intent newIntent = new Intent(mActivity.getIntent());
+      newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      mActivity.startActivity(newIntent);
+
+      receiveSharingIntentHelper.sendFileNames(reactContext, newIntent, promise);
+      mActivity.finish();
+      return;
+    }
+
     Intent intent = mActivity.getIntent();
     receiveSharingIntentHelper.clearFileNames(intent);
   }
