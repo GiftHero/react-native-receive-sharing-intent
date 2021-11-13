@@ -30,6 +30,7 @@ public class ReceiveSharingIntentModule extends ReactContextBaseJavaModule {
   protected void onNewIntent(Intent intent) {
     Activity mActivity = getCurrentActivity();
     if(mActivity == null) { return; }
+    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
     mActivity.setIntent(intent);
   }
 
