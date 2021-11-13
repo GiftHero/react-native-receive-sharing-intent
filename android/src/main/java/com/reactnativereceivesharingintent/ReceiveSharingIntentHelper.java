@@ -28,6 +28,10 @@ public class ReceiveSharingIntentHelper {
 
   @RequiresApi(api = Build.VERSION_CODES.KITKAT)
   public void sendFileNames(Context context, Intent intent, Promise promise){
+    if(intent == null) {
+      return;
+    }
+    
     try {
       String action = intent.getAction();
       String type = intent.getType();
@@ -50,9 +54,15 @@ public class ReceiveSharingIntentHelper {
         }else{
           WritableMap files = new WritableNativeMap();
           WritableMap file = new WritableNativeMap();
+          file.putString("contentUri",null);
+          file.putString("filePath", null);
+          file.putString("fileName", null);
+          file.putString("extension", null);
           if(text.startsWith("http")){
             file.putString("weblink", text);
+            file.putString("text",null);
           }else{
+            file.putString("weblink", null);
             file.putString("text",text);
           }
           file.putString("subject", subject);
@@ -64,12 +74,13 @@ public class ReceiveSharingIntentHelper {
         String link = intent.getDataString();
         WritableMap files = new WritableNativeMap();
         WritableMap file = new WritableNativeMap();
-        if (type.startsWith("image") || type.startsWith("video") || type.startsWith("audio")) {
-          String filePath = ReceiveSharingIntentGetFileDirectory.getFilePath(context, Uri.parse(link));
-          file.putString("filePath", filePath);
-        } else {
-          file.putString("weblink", link);
-        }
+        file.putString("contentUri",null);
+        file.putString("filePath", null);
+        file.putString("mimeType",null);
+        file.putString("text",null);
+        file.putString("weblink", link);
+        file.putString("fileName", null);
+        file.putString("extension", null);
         files.putMap("0",file);
         promise.resolve(files);
       }
@@ -165,7 +176,6 @@ public class ReceiveSharingIntentHelper {
     } else if (type.startsWith("image") || type.startsWith("video") || type.startsWith("application")) {
       intent.removeExtra(Intent.EXTRA_STREAM);
     }
-    intent.setData(null);
   }
 
   public String getFileName(String file){
