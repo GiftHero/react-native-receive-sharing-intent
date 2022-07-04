@@ -164,14 +164,19 @@ public class ReceiveSharingIntentHelper {
   }
 
 
-  public void clearFileNames(Intent intent){
+  public void clearFileNames(Intent intent) {
     String type = intent.getType();
-    if(type == null) return;
+    if (type == null) {
+      return;
+    }
+
     if (type.startsWith("text")) {
       intent.removeExtra(Intent.EXTRA_TEXT);
     } else if (type.startsWith("image") || type.startsWith("video") || type.startsWith("application")) {
       intent.removeExtra(Intent.EXTRA_STREAM);
     }
+
+    intent.setData(null);
   }
 
   public String getFileName(String file){
