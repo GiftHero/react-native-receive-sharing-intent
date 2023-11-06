@@ -33,14 +33,18 @@ class ReceiveSharingIntentModule implements IReceiveSharingIntent {
         }
       });
     } else {
+      AppState.addEventListener('change', (status: string) => {
+        if (status === 'active') {
+          this.getFileNames(handler, errorHandler, '', null);
+        }
+      });
+      
       this.getFileNames(handler, errorHandler, '', null);
-      // AppState.addEventListener('change', (status: string) => {
-      //   if (status === 'active' && !this.isClear) {
-      //     this.getFileNames(handler, errorHandler, '', null);
-      //   }
-      // });
-      // if (!this.isClear) this.getFileNames(handler, errorHandler, '', null);
     }
+  }
+
+  clearFileNames() {
+    ReceiveSharingIntent.clearFileNames().then();
   }
 
   clearReceivedFiles() {
